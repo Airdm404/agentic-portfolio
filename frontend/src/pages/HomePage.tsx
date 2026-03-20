@@ -13,11 +13,6 @@ export default function HomePage() {
                 <>
                     <Hero />
                     <Capabilities />
-                    <Projects />
-                    <Experience />
-                    <Hero />
-                    <Hero />
-                    <Hero />
                 </>
             } 
             rightPane={
