@@ -7,16 +7,16 @@ type CardProps = {
 export default function Card({title, items}: CardProps) {
     return (
 
-        <article className="rounded border border-zinc-800 bg-zinc-900/70 p-5">
-            <h3 className="mb-4 font-mono text-xs uppercase tracking-[0.24em] text-zinc-500">
+        <article className="flex flex-col gap-4 rounded border border-border-color bg-surface p-5 transition-colors hover:border-primary/50">
+            <h4 className="text-sm font-mono text-muted uppercase tracking-wider">
                 {title}
-            </h3>
+            </h4>
 
             <div className="flex flex-wrap gap-2">
                 {items.map((item) => (
                 <span
                     key={item}
-                    className="rounded border border-emerald-400/20 bg-emerald-400/5 px-3 py-1 font-mono text-xs text-emerald-300"
+                    className="px-3 py-1 text-[13px] font-mono text-primary bg-primary/5 border border-primary/20 rounded hover:bg-primary/10 hover:border-primary hover:shadow-neon transition-all cursor-default"
                 >
                     {item}
                 </span>
