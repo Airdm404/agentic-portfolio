@@ -3,7 +3,7 @@ import CapabilityCard from "./CapabilityCard"
 
 export default function Capabilities() {
     return (
-        <section className="flex flex-col gap-8 mt-8 border-t border-border-color pt-12">
+        <section className="flex flex-col gap-8 mt-2 border-t border-border-color pt-12">
             {/* Title */}
             <div className="flex items-center gap-3 mb-2">
                 <span className="material-symbols-outlined text-primary">memory</span>

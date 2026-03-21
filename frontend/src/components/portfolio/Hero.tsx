@@ -1,80 +1,42 @@
-import { FaGithub, FaLinkedin, FaEnvelope, FaXTwitter } from "react-icons/fa6";
+import Socials from "./Socials"
 
 
 export default function Hero() {
     return (
         <section className="flex flex-col gap-6">
-
-            {/* Social Media Links */}
-            <ul className="flex items-center gap-5 text-zinc-400">
-                <li>
-                <a
-                    href="https://x.com/ed3mah"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="X"
-                    className="transition hover:text-primary"
-                >
-                    <FaXTwitter className="text-lg" />
-                </a>
-                </li>
-
-                <li>
-                <a
-                    href="https://www.linkedin.com/in/edem-ahorlu"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="LinkedIn"
-                    className="transition hover:text-primary"
-                >
-                    <FaLinkedin className="text-lg" />
-                </a>
-                </li>
-
-                <li>
-                <a
-                    href="https://github.com/airdm404"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="GitHub"
-                    className="transition hover:text-primary"
-                >
-                    <FaGithub className="text-lg" />
-                </a>
-                </li>
-
-                <li>
-                <a
-                    href="mailto:edem.ahorluk@gmail.com"
-                    aria-label="Email"
-                    className="transition hover:text-primary"
-                >
-                    <FaEnvelope className="text-lg" />
-                </a>
-                </li>
-            </ul>
-
-            <div className="flex flex-col gap-6">
-                <h1 className="text-4xl lg:text-5xl font-mono font-bold text-zinc-50 leading-tight">
-                <span className="text-primary">&gt;</span>{" "}
-                <span className="typing-effect inline-block">Edem Ahorlu</span>
+            <Socials />
+            <div className="flex flex-col gap-6 mt-4">
+                <h1 className="text-4xl font-mono font-bold leading-tight text-zinc-50 lg:text-5xl">
+                    <span className="text-primary relative top-2">&gt;</span>{" "}
+                    <span className="typing-effect inline-block">Edem Ahorlu</span>
                 </h1>
+
                 <h2 className="text-2xl font-mono text-primary/80">
                 Full-Stack AI Engineer
                 </h2>
 
-
-                <p className="text-lg text-zinc-300 leading-relaxed font-display max-w-2xl mt-4">
-                    I build full-stack products and AI-powered workflows that help teams move
-                    faster from idea to deployed software. Right now I’m focused on practical
-                    agentic systems, context-aware chat experiences, and startup-ready MVPs.
+                <p className="mt-4 max-w-2xl font-display text-lg leading-relaxed text-zinc-300">
+                I build full-stack products and AI-powered workflows that help teams move
+                faster from idea to deployed software. Right now I’m focused on practical
+                agentic systems, context-aware chat experiences, and startup-ready MVPs.
                 </p>
 
-                <div className="flex items-center gap-2 text-muted text-sm font-mono animate-pulse-fast">
-                    <span className="w-2 h-2 rounded-full bg-primary"></span>
-                        Chat with my AI -&gt;
-                </div>
+                {/* Bottom Row */}
+                <div className="mt-6 flex items-center gap-8">
+                {/* Resume Button */}
+                <button className="group flex items-center gap-2 rounded border border-primary bg-primary/10 px-6 py-3 font-mono text-sm text-primary transition-all duration-300 hover:bg-primary/20 hover:shadow-neon">
+                    <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">
+                    terminal
+                    </span>
+                    View Resume.pdf
+                </button>
 
+                {/* Chat indicator */}
+                <div className="flex items-center gap-2 font-mono text-sm text-muted animate-pulse-fast">
+                    <span className="h-2 w-2 rounded-full bg-primary"></span>
+                    Chat with my AI -&gt;
+                </div>
+                </div>
             </div>
 
 
