@@ -3,7 +3,7 @@ type PortfolioLayoutProps = {
   rightPane: React.ReactNode;
 };
 
-export default function CommandCenterLayout({
+export default function PortfolioLayout({
   leftPane,
   rightPane,
 }: PortfolioLayoutProps) {
