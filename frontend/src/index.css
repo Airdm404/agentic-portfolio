@@ -88,10 +88,12 @@ body::after {
 
 .typing-effect {
   overflow: hidden;
+  width: 0;
   white-space: nowrap;
   border-right: 2px solid #06f99c;
-  vertical-align: bottom;
-  animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+  line-height: 1.6;
+  
+  animation: typing 2s steps(11, end) forwards, blink-caret 0.75s step-end infinite;
 }
 
 @keyframes typing {
@@ -100,7 +102,7 @@ body::after {
   }
 
   to {
-    width: 14ch;
+    width: 11ch;
   }
 }
 

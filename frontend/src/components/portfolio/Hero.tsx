@@ -7,8 +7,10 @@ export default function Hero() {
             <Socials />
             <div className="flex flex-col gap-6 mt-4">
                 <h1 className="text-4xl font-mono font-bold leading-tight text-zinc-50 lg:text-5xl">
-                    <span className="text-primary relative top-2">&gt;</span>{" "}
-                    <span className="typing-effect inline-block">Edem Ahorlu</span>
+                    <span className="inline-flex items-end gap-4">
+                        <span className="text-primary">&gt;</span>
+                        <span className="typing-effect inline-block">Edem Ahorlu</span>
+                    </span>
                 </h1>
 
                 <h2 className="text-2xl font-mono text-primary/80">
