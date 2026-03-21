@@ -129,7 +129,6 @@ body::after {
 
   .glass-card {
       background: rgba(18, 18, 20, 0.7);
-      backdrop-filter: blur(12px);
       border: 1px solid rgba(6, 249, 156, 0.1);
   }
 
@@ -143,5 +142,4 @@ body::after {
 
   .glassy {
       background: rgba(18, 18, 20, 0.7);
-      backdrop-filter: blur(12px);
   }
