@@ -13,6 +13,7 @@ export default function HomePage() {
                 <>
                     <Hero />
                     <Capabilities />
+                    <Projects/>
                 </>
             } 
             rightPane={
