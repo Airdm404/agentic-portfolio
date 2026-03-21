@@ -12,7 +12,7 @@ export default function Experience() {
             </div>
 
             <section className="relative">
-            <div className="timeline-line absolute top-0 bottom-0 left-4 w-[1px]" />
+            <div className="timeline-line absolute top-0 bottom-0 left-4 w-px" />
 
             <ExperienceCard
                 period="2022 - PRESENT"
@@ -29,7 +29,6 @@ export default function Experience() {
                 company="NEURAL_DYNAMICS_INC"
                 highlights={["Architected a distributed processing engine that reduced latency by 42%_DELTA across clusters.", "Deployed automated redundancy protocols resulting in 99.999%_UPTIME."]}
                 ctaLabel="ASK_AI: WORKSTACK_CONTEXT"
-                isCurrent={true}
             />
              </section>
         </section>
