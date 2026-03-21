@@ -127,19 +127,38 @@ body::after {
 }
 
 
-  .glass-card {
-      background: rgba(18, 18, 20, 0.7);
-      border: 1px solid rgba(6, 249, 156, 0.1);
-  }
+.glass-card {
+    background: rgba(18, 18, 20, 0.7);
+    border: 1px solid rgba(6, 249, 156, 0.1);
+}
 
-  .timeline-line {
-      background: linear-gradient(180deg, transparent 0%, #06f99c44 15%, #06f99c44 85%, transparent 100%);
-  }
+.timeline-line {
+    background: linear-gradient(180deg, transparent 0%, #06f99c44 15%, #06f99c44 85%, transparent 100%);
+}
 
-  .glow-node {
-      box-shadow: 0 0 10px #06f99c;
-  }
+.glow-node {
+    box-shadow: 0 0 10px #06f99c;
+}
 
-  .glassy {
-      background: rgba(18, 18, 20, 0.7);
-  }
+.glassy {
+    background: rgba(18, 18, 20, 0.7);
+}
+
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505; /* matches background-dark */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272A; /* border-color */
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #71717A; /* muted */
+}
