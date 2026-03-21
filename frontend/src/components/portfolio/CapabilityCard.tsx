@@ -7,7 +7,7 @@ type CapabilityCardProps = {
 export default function CapabilityCard({title, items}: CapabilityCardProps) {
     return (
 
-        <article className="flex flex-col gap-4 rounded border border-border-color bg-surface p-5 transition-colors hover:border-primary/50">
+        <article className="flex flex-col gap-4 rounded border border-border-color bg-surface p-5 transition-colors hover:border-primary/50 glassy">
             <h4 className="text-sm font-mono text-muted uppercase tracking-wider">
                 {title}
             </h4>
