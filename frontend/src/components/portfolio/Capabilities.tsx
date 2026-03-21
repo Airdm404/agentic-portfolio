@@ -1,4 +1,4 @@
-import Card from "./Card"
+import CapabilityCard from "./CapabilityCard"
 
 
 export default function Capabilities() {
@@ -13,9 +13,9 @@ export default function Capabilities() {
             
             {/* Grid */}
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card title="Languages" items={["Python", "TypeScript", "Go", "Rust"]} />
-                <Card title="AI & Data" items={["PyTorch", "LangChain", "Vector DBs", "OpenAI API"]} />
-                <Card title="Infra" items={["AWS", "Docker", "Kubernetes", "Terraform"]} />
+                <CapabilityCard title="Languages" items={["Python", "TypeScript", "Go", "Rust"]} />
+                <CapabilityCard title="AI & Data" items={["PyTorch", "LangChain", "Vector DBs", "OpenAI API"]} />
+                <CapabilityCard title="Infra" items={["AWS", "Docker", "Kubernetes", "Terraform"]} />
              </div>
       
         </section>

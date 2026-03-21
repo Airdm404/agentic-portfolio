@@ -1,10 +1,10 @@
 
-type CardProps = {
+type CapabilityCardProps = {
     title: string
     items: string[]
 }
 
-export default function Card({title, items}: CardProps) {
+export default function CapabilityCard({title, items}: CapabilityCardProps) {
     return (
 
         <article className="flex flex-col gap-4 rounded border border-border-color bg-surface p-5 transition-colors hover:border-primary/50">
