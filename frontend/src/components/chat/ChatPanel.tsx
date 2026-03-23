@@ -55,12 +55,6 @@ export default function ChatPanel() {
         setInputMessage("")
     }
 
-    function handleSelectSuggestedQuery(query: string) {
-        setInputMessage(query);
-    }
-
-
-
   return (
     <section className="flex h-full flex-col">
         <ChatHeader />

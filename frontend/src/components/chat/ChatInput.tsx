@@ -1,3 +1,5 @@
+import {useRef, useEffect} from "react"
+
 type ChatInputProps = {
   inputMessage: string
   setInputMessage: React.Dispatch<React.SetStateAction<string>>
@@ -11,49 +13,53 @@ export default function ChatInput({
     setInputMessage,
     onSend
 }: ChatInputProps) {
+  
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-    function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-        if (event.key === "Enter") {
-        onSend();
-        }
+  useEffect(() => {
+    if (!textareaRef.current) return;
+
+    textareaRef.current.style.height = "auto"
+    textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 160)}px`
+  }, [inputMessage])
+
+  function handleKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault()
+      onSend()
     }
-
-
+  }
 
   return (
     <div className="border-t border-border-color p-6">
-      <div className="relative flex items-center rounded border border-border-color bg-surface transition-all focus-within:border-primary focus-within:shadow-neon">
-        <span className="material-symbols-outlined ml-4 text-[18px] text-primary">
-          terminal
-        </span>
-
-        <input
-            type="text"
+      <div className="rounded-3xl border border-border-color bg-surface transition-all focus-within:border-primary focus-within:shadow-neon">
+        <div className="px-4 pt-4">
+          <textarea
+            ref={textareaRef}
             value={inputMessage}
             onChange={(event) => setInputMessage(event.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ask a question..."
-            className="w-full border-none bg-transparent px-4 py-4 font-mono text-sm text-zinc-50 placeholder-muted focus:outline-none"
-        />
+            rows={2}
+            className="max-h-40 min-h-14 w-full resize-none overflow-y-auto bg-transparent font-mono text-sm leading-6 text-zinc-50 placeholder:text-muted focus:outline-none"
+          />
+        </div>
 
-        <button
+        <div className="flex items-center justify-between px-4 py-3">
+          <span className="material-symbols-outlined text-[18px] text-primary">
+            terminal
+          </span>
+
+          <button
             onClick={onSend}
-            className="mr-2 flex items-center justify-center p-2 text-muted transition-colors hover:text-primary"
-        >
-          <span className="material-symbols-outlined text-[20px]">send</span>
-        </button>
-      </div>
-
-      <div className="mt-2 flex items-center justify-between px-1">
-        <span className="text-[11px] font-mono text-muted">
-          Press Enter to send
-        </span>
-
-        <span className="flex items-center gap-1 text-[11px] font-mono text-muted">
-          <span className="material-symbols-outlined text-[12px]">lock</span>
-          Context secured
-        </span>
+            className="flex items-center justify-center p-1 text-muted transition-colors hover:text-primary"
+          >
+            <span className="material-symbols-outlined text-[20px]">send</span>
+          </button>
+        </div>
       </div>
     </div>
   )
+
+
 }
