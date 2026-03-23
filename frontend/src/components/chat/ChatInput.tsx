@@ -2,21 +2,14 @@ type ChatInputProps = {
   inputMessage: string
   setInputMessage: React.Dispatch<React.SetStateAction<string>>
   onSend: () => void
-  onSelectSuggestedQuery: (query: string) => void;
 };
 
-
-const suggestedQueries = [
-  "What is their strongest language?",
-  "Explain their RAG architecture",
-]
 
 
 export default function ChatInput({
     inputMessage,
     setInputMessage,
-    onSend,
-    onSelectSuggestedQuery
+    onSend
 }: ChatInputProps) {
 
     function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -29,20 +22,6 @@ export default function ChatInput({
 
   return (
     <div className="border-t border-border-color p-6">
-        <div className="mb-4 flex flex-col items-end gap-3">
-            <div className="flex flex-wrap justify-end gap-2">
-            {suggestedQueries.map((query) => (
-                <button
-                key={query}
-                onClick={() => onSelectSuggestedQuery(query)}
-                className="rounded border border-border-color bg-surface px-4 py-2 text-left font-mono text-sm text-muted transition-all hover:border-primary hover:bg-primary/5 hover:text-primary"
-                >
-                {`> ${query}`}
-                </button>
-            ))}
-            </div>
-        </div>
-
       <div className="relative flex items-center rounded border border-border-color bg-surface transition-all focus-within:border-primary focus-within:shadow-neon">
         <span className="material-symbols-outlined ml-4 text-[18px] text-primary">
           terminal

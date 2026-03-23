@@ -71,7 +71,6 @@ export default function ChatPanel() {
             inputMessage={inputMessage}
             setInputMessage={setInputMessage}
             onSend={handleSendMessage}
-            onSelectSuggestedQuery={handleSelectSuggestedQuery}
         />
     </section>
   )
