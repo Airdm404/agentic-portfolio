@@ -1,4 +1,5 @@
 import type {ChatMessage} from "./ChatPanel"
+import {useRef, useEffect} from "react"
 
 
 type ChatMessagesProps = {
@@ -9,6 +10,21 @@ type ChatMessagesProps = {
 export default function ChatMessages({ 
     messages,
 }: ChatMessagesProps) {
+
+
+    const messagesEndRef = useRef<HTMLDivElement | null>(null)
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
+
+    useEffect(() => {
+        scrollToBottom()
+    }, [messages])
+
+
+
+
   return (
     <div className="flex flex-1 flex-col gap-6 overflow-y-auto p-6">
         {messages.map((message, index) => {
@@ -51,6 +67,7 @@ export default function ChatMessages({
                 </div>
             )
         })}
+        <div ref={messagesEndRef} />
     </div>
   )
 }
