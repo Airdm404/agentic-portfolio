@@ -2,7 +2,7 @@
 
 export default function ChatHeader() {
     return (
-        <header className="flex items-center justify-between border-b border-border-color bg-surface/50 px-6 py-8">
+        <header className="flex items-center justify-between border-b border-border-color bg-surface/50 px-6 py-6">
             <div className="flex items-center gap-3">
                 <div className="relative flex h-3 w-3">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
