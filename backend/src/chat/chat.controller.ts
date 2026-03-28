@@ -8,7 +8,7 @@ export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
   @Post()
-  createReply(@Body() body: ChatRequestDto): ChatResponseDto {
-    return this.chatService.createReply(body);
+  async createReply(@Body() body: ChatRequestDto): Promise<ChatResponseDto> {
+    return await this.chatService.createReply(body);
   }
 }
