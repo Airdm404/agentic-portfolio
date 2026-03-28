@@ -3,9 +3,17 @@ import ChatHeader from "./ChatHeader"
 import ChatMessages from "./ChatMessages"
 import ChatInput from "./ChatInput"
 
-
-
 export type ChatRole = "assistant" | "user";
+export type ChatIntent =
+  | 'PORTFOLIO'
+  | 'PROJECT'
+  | 'EXPERIENCE'
+  | 'HIRING'
+  | 'CONTACT'
+  | 'SMALL_TALK'
+  | 'OFF_TOPIC'
+  | 'INJECTION';
+
 
 export type ChatMessage = {
     role: ChatRole
@@ -14,8 +22,14 @@ export type ChatMessage = {
 }
 
 type ChatResponse = {
-    message: ChatMessage
-}
+  message: ChatMessage;
+  meta: {
+    intent: ChatIntent;
+    capReached: boolean;
+    messagesRemaining: number;
+    handoffEmail: string | null;
+  };
+};
 
 function getCurrentTimestamp(): string {
   return new Date().toLocaleTimeString([], {
@@ -25,12 +39,14 @@ function getCurrentTimestamp(): string {
   })
 }
 
+const API_URL = "http://localhost:3000/chat"
+
 
 
 const initialMessages: ChatMessage[] = [
   {
-    role: "system",
-    text: "Hello. I am the interactive agent trained on Edem Ahorlu's professional history, code repositories, and system designs.",
+    role: "assistant",
+    text: "Ask about Edem’s work, projects, stack, or background.",
     timestamp: getCurrentTimestamp()
   }
 ]
@@ -53,17 +69,18 @@ export default function ChatPanel() {
             timestamp: getCurrentTimestamp()
         }
 
-        setMessages((prev) => [...prev, userMessage])
+        const nextMessages = [...messages, userMessage];
+        setMessages(nextMessages)
         setInputMessage("")
 
         // call backend API to get system response
         try {
-          const response = await fetch("http://localhost:3000/chat", {
+          const response = await fetch(API_URL, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ message: trimmed }),
+            body: JSON.stringify({ messages: nextMessages.map(({ role, text }) => ({ role, text })) })
           });
           
           if (!response.ok) {
