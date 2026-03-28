@@ -1,6 +1,6 @@
 export type ChatRole = 'system' | 'user';
 
-export class ChatMessageResponseDto {
+export class ChatResponseDto {
   message!: {
     role: ChatRole;
     text: string;
