@@ -5,7 +5,7 @@ import ChatInput from "./ChatInput"
 
 
 
-export type ChatRole = "system" | "user";
+export type ChatRole = "assistant" | "user";
 
 export type ChatMessage = {
     role: ChatRole
