@@ -28,7 +28,7 @@ export default function ChatMessages({
   return (
     <div className="flex flex-1 flex-col gap-6 overflow-y-auto p-6">
         {messages.map((message, index) => {
-            const isSystem = message.role === "system";
+            const isSystem = message.role === "assistant";
 
             return (
                 <div
