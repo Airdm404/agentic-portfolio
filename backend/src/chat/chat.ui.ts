@@ -24,7 +24,7 @@ export const chatMessageMetadataSchema = z.object({
   totalTokens: z.number().optional(),
 });
 
-export const ChatDataPartsSchemas = {
+export const chatDataPartsSchemas = {
   decision: z.object({
     intent: chatIntentSchema,
     replyKind: chatReplyKindSchema,
@@ -41,8 +41,8 @@ export type ChatIntent = z.infer<typeof chatIntentSchema>;
 export type ChatReplyKind = z.infer<typeof chatReplyKindSchema>;
 export type ChatMessageMetadata = z.infer<typeof chatMessageMetadataSchema>;
 export type ChatDataParts = {
-  decision: z.infer<(typeof ChatDataPartsSchemas)['decision']>;
-  status: z.infer<(typeof ChatDataPartsSchemas)['status']>;
+  decision: z.infer<(typeof chatDataPartsSchemas)['decision']>;
+  status: z.infer<(typeof chatDataPartsSchemas)['status']>;
 };
 
 export type ChatUIMessage = UIMessage<ChatMessageMetadata, ChatDataParts>;

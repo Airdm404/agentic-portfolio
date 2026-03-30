@@ -1,12 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { openai } from '@ai-sdk/openai';
+import {
+  convertToModelMessages,
+  createIdGenerator,
+  createUIMessageStream,
+  generateText,
+  Output,
+  pipeUIMessageStreamToResponse,
+  streamText,
+  validateUIMessages,
+} from 'ai';
+import { type Response } from 'express';
 import { ChatRequestDto } from './dto/chat-request.dto';
 import { ChatResponseDto } from './dto/chat-response.dto';
+import {
+  BASE_SYSTEM_PROMPT,
+  CLASSIFIER_SYSTEM_PROMPT,
+  getRouteInstruction,
+} from './chat.prompts';
+import { classifyIntentSchema } from './chat.schemas';
+import {
+  chatDataPartsSchemas,
+  chatMessageMetadataSchema,
+  type ChatUIMessage,
+} from './chat.ui';
 
 @Injectable()
 export class ChatService {
   async createReply(body: ChatRequestDto): Promise<ChatResponseDto> {
-    const latest = body.messages[body.messages.length - 1];
-    const userCount = body.messages.filter((m) => m.role === 'user').length;
+    // const latest = body.messages[body.messages.length - 1];
+    // const userCount = body.messages.filter((m) => m.role === 'user').length;
 
     const timestamp = new Date().toLocaleTimeString([], {
       hour: '2-digit',
@@ -17,15 +44,122 @@ export class ChatService {
     return {
       message: {
         role: 'assistant',
-        text: `Mock reply to: "${latest.text}"`,
+        text: `Mock reply to"`,
         timestamp,
       },
       meta: {
         intent: 'PORTFOLIO',
         capReached: false,
-        messagesRemaining: Math.max(7 - userCount, 0),
+        messagesRemaining: 0,
         handoffEmail: null,
       },
     };
+  }
+
+  async streamReply(body: ChatRequestDto, response: Response): Promise<void> {
+    let messages: ChatUIMessage[];
+
+    try {
+      messages = await validateUIMessages({
+        messages: body.messages,
+        metadataSchema: chatMessageMetadataSchema,
+        dataSchemas: chatDataPartsSchemas,
+      });
+    } catch {
+      throw new BadRequestException('Invalid chat message payload.');
+    }
+
+    const latestUserText = messages[messages.length - 1];
+    if (latestUserText.role !== 'user') {
+      throw new BadRequestException('A user message is required.');
+    }
+
+    try {
+      const stream = createUIMessageStream<ChatUIMessage>({
+        originalMessages: messages,
+        generateId: createIdGenerator({
+          prefix: 'msg',
+          size: 16,
+        }),
+        execute: async ({ writer }) => {
+          writer.write({
+            type: 'data-status',
+            data: {
+              stage: 'classifying',
+              label: 'Analyzing your question...',
+            },
+            transient: true,
+          });
+
+          const classification = await this.classifyIntent(messages);
+
+          writer.write({
+            type: 'data-decision',
+            id: 'decision',
+            data: {
+              intent: classification.intent,
+              replyKind: 'answer',
+              capReached: false,
+              handoffEmail: null,
+            },
+          });
+
+          writer.write({
+            type: 'data-status',
+            data: {
+              stage: 'answering',
+              label: 'Generating response...',
+            },
+            transient: true,
+          });
+
+          const result = streamText({
+            model: openai('gpt-5-mini'),
+            system: `${BASE_SYSTEM_PROMPT}\n\n${getRouteInstruction(classification.intent)}`,
+            messages: await convertToModelMessages(messages),
+            temperature: classification.answerMode === 'detailed' ? 0.4 : 0.2,
+          });
+
+          writer.merge(
+            result.toUIMessageStream({
+              messageMetadata: ({ part }) => {
+                if (part.type === 'start') {
+                  return {
+                    createdAt: Date.now(),
+                  };
+                }
+
+                if (part.type === 'finish') {
+                  return {
+                    totalTokens: part.totalUsage.totalTokens,
+                  };
+                }
+                return undefined;
+              },
+            }),
+          );
+        },
+      });
+
+      pipeUIMessageStreamToResponse({
+        response,
+        stream,
+      });
+    } catch {
+      throw new InternalServerErrorException('Failed to stream chat response.');
+    }
+  }
+
+  private async classifyIntent(messages: ChatUIMessage[]) {
+    const { output } = await generateText({
+      model: openai('gpt-5-nano'),
+      system: CLASSIFIER_SYSTEM_PROMPT,
+      messages: await convertToModelMessages(messages),
+      output: Output.object({
+        schema: classifyIntentSchema,
+      }),
+    });
+
+    return output;
   }
 }
