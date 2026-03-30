@@ -1,12 +1,10 @@
-import { Type } from 'class-transformer';
-import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator';
-
-import { ChatMessageDto } from './chat-message.dto';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class ChatRequestDto {
   @IsArray()
-  @ArrayMinSize(1)
-  @ValidateNested({ each: true })
-  @Type(() => ChatMessageDto)
-  messages!: ChatMessageDto[];
+  messages!: unknown[];
+
+  @IsOptional()
+  @IsString()
+  id?: string;
 }
