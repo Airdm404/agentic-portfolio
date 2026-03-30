@@ -1,108 +1,75 @@
-import { useState} from "react"
+import { useEffect, useState} from "react"
 import ChatHeader from "./ChatHeader"
 import ChatMessages from "./ChatMessages"
 import ChatInput from "./ChatInput"
-
-export type ChatRole = "assistant" | "user";
-export type ChatIntent =
-  | 'PORTFOLIO'
-  | 'PROJECT'
-  | 'EXPERIENCE'
-  | 'HIRING'
-  | 'CONTACT'
-  | 'SMALL_TALK'
-  | 'OFF_TOPIC'
-  | 'INJECTION';
+import type { ChatUIMessage } from "../../schemas/chat.ui";
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
 
 
-export type ChatMessage = {
-    role: ChatRole
-    text: string
-    timestamp: string
-}
+const API_URL = "http://localhost:3000/chat/stream"
 
-type ChatResponse = {
-  message: ChatMessage;
-  meta: {
-    intent: ChatIntent;
-    capReached: boolean;
-    messagesRemaining: number;
-    handoffEmail: string | null;
-  };
+
+const introMessage: ChatUIMessage = {
+  id: "intro",
+  role: "assistant",
+  metadata: {
+    createdAt: Date.now(),
+  },
+  parts: [
+    {
+      type: "text",
+      text: "Ask about Edem’s work, projects, stack, or background.",
+    },
+  ],
 };
 
-function getCurrentTimestamp(): string {
-  return new Date().toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true
-  })
-}
-
-const API_URL = "http://localhost:3000/chat"
-
-
-
-const initialMessages: ChatMessage[] = [
-  {
-    role: "assistant",
-    text: "Ask about Edem’s work, projects, stack, or background.",
-    timestamp: getCurrentTimestamp()
-  }
-]
 
 
 export default function ChatPanel() {
-    const [messages, setMessages] = useState<ChatMessage[]>(initialMessages)
-    const [inputMessage, setInputMessage] = useState("")
+  const [inputMessage, setInputMessage] = useState("")
+  const { messages, sendMessage, setMessages, status, error } = useChat<ChatUIMessage>({
+    transport: new DefaultChatTransport({
+      api: API_URL,
+    }),
+  });
 
-    async function handleSendMessage() {
-        const trimmed = inputMessage.trim()
-
-        if (!trimmed) {
-            return
-        }
-
-        const userMessage: ChatMessage = {
-            role: "user",
-            text: trimmed,
-            timestamp: getCurrentTimestamp()
-        }
-
-        const nextMessages = [...messages, userMessage];
-        setMessages(nextMessages)
-        setInputMessage("")
-
-        // call backend API to get system response
-        try {
-          const response = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ messages: nextMessages.map(({ role, text }) => ({ role, text })) })
-          });
-          
-          if (!response.ok) {
-            throw new Error(`Request failed with status ${response.status}`);
-          }
-
-          const data: ChatResponse = await response.json();
-          setMessages((prev) => [...prev, data.message]);
-
-        } catch (error) {
-            console.error("Error sending message:", error)
-        }
+  useEffect(() => {
+    if (messages.length === 0) {
+      setMessages([introMessage]);
     }
+  }, [messages.length, setMessages]);
+
+  const isBusy = status === "submitted" || status === "streaming";
+
+  async function handleSendMessage() {
+      const trimmed = inputMessage.trim()
+
+      if (!trimmed || isBusy) {
+          return
+      }
+
+      setInputMessage("")
+      await sendMessage({text: trimmed})
+  }
 
   return (
     <section className="flex h-full flex-col">
         <ChatHeader />
         <ChatMessages messages={messages} />
+
+        {error ? (
+          <div className="px-6 pb-2 font-mono text-xs text-red-400">
+            Unable to reach the chat service right now.
+          </div>
+          ) : null
+        }
+
         <ChatInput
             inputMessage={inputMessage}
             setInputMessage={setInputMessage}
             onSend={handleSendMessage}
+            disabled={isBusy}
         />
     </section>
   )

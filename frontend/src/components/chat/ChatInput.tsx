@@ -3,7 +3,8 @@ import {useRef, useEffect} from "react"
 type ChatInputProps = {
   inputMessage: string
   setInputMessage: React.Dispatch<React.SetStateAction<string>>
-  onSend: () => void
+  onSend: () => void | Promise<void>;
+  disabled?: boolean;
 };
 
 
@@ -11,7 +12,8 @@ type ChatInputProps = {
 export default function ChatInput({
     inputMessage,
     setInputMessage,
-    onSend
+    onSend,
+    disabled = false,
 }: ChatInputProps) {
   
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -26,7 +28,10 @@ export default function ChatInput({
   function handleKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault()
-      onSend()
+
+      if (!disabled) {
+        onSend()
+      }
     }
   }
 
@@ -39,8 +44,9 @@ export default function ChatInput({
             value={inputMessage}
             onChange={(event) => setInputMessage(event.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask a question..."
+            placeholder={disabled ? "Assistant is responding..." : "Ask a question..."}
             rows={2}
+            disabled={disabled}
             className="max-h-40 min-h-14 w-full resize-none overflow-y-auto bg-transparent font-mono text-sm leading-6 text-zinc-50 placeholder:text-muted focus:outline-none"
           />
         </div>
@@ -52,7 +58,8 @@ export default function ChatInput({
 
           <button
             onClick={onSend}
-            className="flex items-center justify-center p-1 text-muted transition-colors hover:text-primary"
+            disabled={disabled}
+            className="flex items-center justify-center p-1 text-muted transition-colors enabled:hover:text-primary disabled:cursor-not-allowed"
           >
             <span className="material-symbols-outlined text-[20px]">send</span>
           </button>
