@@ -65,11 +65,13 @@ export class ChatService {
         metadataSchema: chatMessageMetadataSchema,
         dataSchemas: chatDataPartsSchemas,
       });
-    } catch {
+    } catch (error) {
+      console.error('validateUIMessages failed:', error);
       throw new BadRequestException('Invalid chat message payload.');
     }
 
     const latestUserText = messages[messages.length - 1];
+    console.log('Latest message:', latestUserText);
     if (latestUserText.role !== 'user') {
       throw new BadRequestException('A user message is required.');
     }
@@ -91,8 +93,10 @@ export class ChatService {
             transient: true,
           });
 
-          const classification = await this.classifyIntent(messages);
+          const classification = await this.classifyIntent([latestUserText]);
+          console.log(classification);
 
+          console.log('first write');
           writer.write({
             type: 'data-decision',
             id: 'decision',
@@ -104,6 +108,8 @@ export class ChatService {
             },
           });
 
+          console.log('second write');
+
           writer.write({
             type: 'data-status',
             data: {
@@ -113,12 +119,15 @@ export class ChatService {
             transient: true,
           });
 
+          console.log('api answer call');
+
           const result = streamText({
             model: openai('gpt-5-mini'),
             system: `${BASE_SYSTEM_PROMPT}\n\n${getRouteInstruction(classification.intent)}`,
             messages: await convertToModelMessages(messages),
-            temperature: classification.answerMode === 'detailed' ? 0.4 : 0.2,
           });
+
+          console.log('write merge');
 
           writer.merge(
             result.toUIMessageStream({
@@ -141,11 +150,14 @@ export class ChatService {
         },
       });
 
+      console.log('stream created');
+
       pipeUIMessageStreamToResponse({
         response,
         stream,
       });
-    } catch {
+    } catch (error) {
+      console.error('streamReply failed:', error);
       throw new InternalServerErrorException('Failed to stream chat response.');
     }
   }

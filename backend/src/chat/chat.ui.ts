@@ -19,10 +19,12 @@ export const chatReplyKindSchema = z.enum([
   'handoff',
 ]);
 
-export const chatMessageMetadataSchema = z.object({
-  createdAt: z.number().optional(),
-  totalTokens: z.number().optional(),
-});
+export const chatMessageMetadataSchema = z
+  .object({
+    createdAt: z.number().optional(),
+    totalTokens: z.number().optional(),
+  })
+  .optional();
 
 export const chatDataPartsSchemas = {
   decision: z.object({
