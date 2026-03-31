@@ -50,7 +50,7 @@ export default function ChatPanel() {
       }
 
       setInputMessage("")
-      await sendMessage({text: trimmed})
+      await sendMessage({text: trimmed, metadata: {createdAt: Date.now()}})
   }
 
   return (
