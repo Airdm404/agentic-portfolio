@@ -2,20 +2,16 @@ import { useEffect, useState} from "react"
 import ChatHeader from "./ChatHeader"
 import ChatMessages from "./ChatMessages"
 import ChatInput from "./ChatInput"
-import type { ChatUIMessage } from "../../schemas/chat.ui";
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+import { DefaultChatTransport, type UIMessage } from "ai";
 
 
-const API_URL = "http://localhost:3000/chat/stream"
+const API_URL = "http://localhost:3000/chat"
 
 
-const introMessage: ChatUIMessage = {
+const introMessage: UIMessage = {
   id: "intro",
   role: "assistant",
-  metadata: {
-    createdAt: Date.now(),
-  },
   parts: [
     {
       type: "text",
@@ -28,7 +24,7 @@ const introMessage: ChatUIMessage = {
 
 export default function ChatPanel() {
   const [inputMessage, setInputMessage] = useState("")
-  const { messages, sendMessage, setMessages, status, error } = useChat<ChatUIMessage>({
+  const { messages, sendMessage, setMessages, status, error } = useChat<UIMessage>({
     transport: new DefaultChatTransport({
       api: API_URL,
     }),
@@ -50,7 +46,7 @@ export default function ChatPanel() {
       }
 
       setInputMessage("")
-      await sendMessage({text: trimmed, metadata: {createdAt: Date.now()}})
+      await sendMessage({ text: trimmed })
   }
 
   return (

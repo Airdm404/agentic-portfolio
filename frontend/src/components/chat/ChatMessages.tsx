@@ -1,12 +1,12 @@
 import {useRef, useEffect} from "react"
-import type { ChatUIMessage } from "../../schemas/chat.ui";
+import type { UIMessage } from "ai";
 
 
 type ChatMessagesProps = {
-  messages: ChatUIMessage[];
+  messages: UIMessage[];
 };
 
-function getText(message: ChatUIMessage) {
+function getText(message: UIMessage) {
   return message.parts
     .filter(
       (
@@ -16,20 +16,6 @@ function getText(message: ChatUIMessage) {
     )
     .map((part) => part.text)
     .join("");
-}
-
-function getTimestamp(message: ChatUIMessage) {
-  const createdAt = message.metadata?.createdAt;
-
-  if (!createdAt) {
-    return null;
-  }
-
-  return new Date(createdAt).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
 }
 
 
@@ -46,7 +32,6 @@ export default function ChatMessages({ messages }: ChatMessagesProps) {
         {messages.map((message) => {
             const isAssistant = message.role === "assistant";
             const text = getText(message).trim();
-            const timestamp = getTimestamp(message);
 
             if (!text) {
                 return null;
@@ -65,11 +50,9 @@ export default function ChatMessages({ messages }: ChatMessagesProps) {
                             smart_toy
                         </span>
                         <span>Assistant</span>
-                        {timestamp ? <span>[{timestamp}]</span> : null}
                         </>
                     ) : (
                         <>
-                        {timestamp ? <span>[{timestamp}]</span> : null}
                         <span>You</span>
                         <span className="material-symbols-outlined text-[14px] text-primary">
                             person
