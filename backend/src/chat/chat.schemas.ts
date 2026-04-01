@@ -11,7 +11,4 @@ export const classifyIntentSchema = z.object({
     'OFF_TOPIC',
     'INJECTION',
   ]),
-  shouldRefuse: z.boolean(),
-  shouldHandoff: z.boolean(),
-  answerMode: z.enum(['concise', 'detailed']),
 });
