@@ -20,9 +20,12 @@ import {
   getRouteInstruction,
 } from './chat.prompts';
 import { classifyIntentSchema } from './chat.schemas';
+import { ProfileService } from 'src/profile/profile.service';
 
 @Injectable()
 export class ChatService {
+  constructor(private readonly profileService: ProfileService) {}
+
   async streamReply(body: ChatRequestDto, response: Response): Promise<void> {
     let messages: UIMessage[];
 
@@ -47,10 +50,18 @@ export class ChatService {
 
     try {
       const classification = await this.classifyIntent(latestUserText);
+      const profileContext = this.profileService.getChatContext(
+        classification.intent,
+      );
 
       const result = streamText({
         model: openai('gpt-5-mini'),
-        system: `${BASE_SYSTEM_PROMPT}\n\n${getRouteInstruction(classification.intent)}`,
+        system: [
+          BASE_SYSTEM_PROMPT,
+          getRouteInstruction(classification.intent),
+          'Portfolio context:',
+          profileContext,
+        ].join('\n\n'),
         messages: await convertToModelMessages(messages),
       });
 
