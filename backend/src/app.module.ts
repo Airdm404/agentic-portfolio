@@ -6,7 +6,11 @@ import { ChatModule } from './chat/chat.module';
 import { ProfileModule } from './profile/profile.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), ChatModule, ProfileModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ChatModule,
+    ProfileModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

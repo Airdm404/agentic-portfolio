@@ -38,7 +38,7 @@ export type ExperienceItem = {
   company: string;
   role: string;
   start: string;
-  end: string | 'present';
+  end: string;
   location?: string;
   summary: string;
   highlights: string[];
