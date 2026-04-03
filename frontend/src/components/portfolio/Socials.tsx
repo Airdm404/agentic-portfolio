@@ -1,18 +1,34 @@
+import { FaEnvelope, FaGithub, FaLinkedin, FaXTwitter } from "react-icons/fa6"
+import type { IconType } from "react-icons"
+import type { ProfileResponse, SocialPlatform } from '../../types/profile';
 
-import { socialLinks } from "../../data/socialLinks"
+
+type SocialsProps = {
+  socials: ProfileResponse["socials"]
+}
+
+const iconByPlatform: Record<SocialPlatform, IconType> = {
+  github: FaGithub,
+  linkedin: FaLinkedin,
+  x: FaXTwitter,
+  email: FaEnvelope,
+}
 
 
-export default function Socials() { 
+export default function Socials({ socials }: SocialsProps) { 
 
   return (
     <div className="flex justify-end gap-5">
-        {socialLinks.map((link) => {
-            const Icon = link.icon
+        {socials.map((social) => {
+            const Icon = iconByPlatform[social.platform];
+            const external = social.href.startsWith("http");
             return (
             <a
-                key={link.label}
-                href={link.href}
-                title={link.label}
+                key={social.platform}
+                href={social.href}
+                title={social.label}
+                target={external ? "_blank" : undefined}
+                rel={external ? "noreferrer" : undefined}
                 className="text-muted transition-all duration-300 hover:text-primary"
             >
                 <Icon className="h-5 w-5" />

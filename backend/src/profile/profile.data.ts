@@ -64,8 +64,8 @@ export const profileData: PortfolioProfile = {
         'Classifies user intent before generating answers',
         'Uses a shared portfolio data model for both UI and chat context',
       ],
-      repoUrl: 'Add your repo URL',
-      demoUrl: 'Add your live URL',
+      repoUrl: 'https://x.com/ed3mah',
+      demoUrl: 'https://x.com/home',
       featured: true,
       chatNotes: {
         problem:
@@ -114,28 +114,18 @@ export const profileData: PortfolioProfile = {
   experience: [
     {
       id: 'exp-1',
-      company: 'Add company name',
-      role: 'Add role title',
-      start: '2024-01',
+      company: 'NEURAL_DYNAMICS_INC',
+      role: 'Senior Systems Architect',
+      start: '2024',
       end: 'present',
       location: 'Add location',
       summary:
         'Summarize the role in one or two sentences with scope and ownership.',
       highlights: [
-        'Built or led something meaningful',
-        'Improved a workflow, system, or metric',
+        'Architected a distributed processing engine that reduced latency by 42%_DELTA across clusters.',
+        'Deployed automated redundancy protocols resulting in 99.999%_UPTIME.',
       ],
       stack: ['TypeScript', 'Python', 'OpenAI API'],
-    },
-    {
-      id: 'exp-2',
-      company: 'Add previous company',
-      role: 'Add previous role',
-      start: '2022-01',
-      end: '2023-12',
-      summary: 'Short role summary.',
-      highlights: ['Highlight 1', 'Highlight 2'],
-      stack: ['Add', 'Relevant', 'Tech'],
     },
   ],
 

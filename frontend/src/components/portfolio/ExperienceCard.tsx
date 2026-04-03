@@ -3,7 +3,7 @@ type ExperienceCardProps = {
     role: string
     company: string
     highlights: string[]
-    ctaLabel: string
+    stack?: string[]
     isCurrent?: boolean
 }
 
@@ -13,7 +13,7 @@ export default function ExperienceCard({
     role,
     company,
     highlights,
-    ctaLabel,
+    stack,
     isCurrent = false
     }: ExperienceCardProps) {
         return (
@@ -59,10 +59,18 @@ export default function ExperienceCard({
                         ))}
                     </ul>
 
-                    <button className="flex items-center gap-2 rounded border border-primary/20 bg-primary/5 px-4 py-2 font-mono text-[10px] uppercase tracking-wider text-primary transition-colors hover:bg-primary/10">
-                        <span className="material-symbols-outlined text-sm">smart_toy</span>
-                        {ctaLabel}
-                    </button>
+                    {stack && stack.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                        {stack.map((tech) => (
+                            <span
+                            key={tech}
+                            className="rounded border border-primary/20 bg-primary/5 px-2 py-0.5 font-mono text-[12px] text-primary hover:bg-primary/10 hover:border-primary hover:shadow-neon transition-all cursor-default"
+                            >
+                            {tech}
+                            </span>
+                        ))}
+                        </div>
+                    ) : null}
                     </div>
                 </div>
             </div>

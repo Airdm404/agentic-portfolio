@@ -1,7 +1,12 @@
 import ProjectCard from "./ProjectCard"
+import type { ProfileResponse } from "../../types/profile"
+
+type ProjectsProps = {
+  projects: ProfileResponse["projects"]
+}
 
 
-export default function Projects() {
+export default function Projects({ projects }: ProjectsProps) {
     return (
         <section className="flex flex-col gap-8 border-t border-border-color pt-12">
             <div className="mb-2 flex items-center gap-3">
@@ -14,38 +19,16 @@ export default function Projects() {
             </div>
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <ProjectCard
-                    title="NEURAL_NEXUS"
-                    description="Autonomous data orchestration layer for real-time edge computing nodes with zero-latency protocols."
-                    technologies={["Rust_OS", "gRPC"]}
-                    icon="deployed_code"
-                    ctaLabel="VIEW_CODE"
-                    href="#"
-                />
-                <ProjectCard
-                    title="NEURAL_NEXUS"
-                    description="Autonomous data orchestration layer for real-time edge computing nodes with zero-latency protocols. Autonomous data orchestration layer for real-time edge computing nodes with zero-latency protocols."
-                    technologies={["Rust_OS", "gRPC"]}
-                    icon="deployed_code"
-                    ctaLabel="VIEW_CODE"
-                    href="#"
-                />
-                <ProjectCard
-                    title="NEURAL_NEXUS"
-                    description="Autonomous data orchestration layer for real-time edge computing nodes with zero-latency protocols."
-                    technologies={["Rust_OS", "gRPC"]}
-                    icon="deployed_code"
-                    ctaLabel="VIEW_CODE"
-                    href="#"
-                />
-                <ProjectCard
-                    title="NEURAL_NEXUS"
-                    description="Autonomous data orchestration layer for real-time edge computing nodes with zero-latency protocols."
-                    technologies={["Rust_OS", "gRPC"]}
-                    icon="deployed_code"
-                    ctaLabel="VIEW_CODE"
-                    href="#"
-                />
+                {projects.map((project) => (
+                    <ProjectCard 
+                        key={project.id}
+                        title={project.name}
+                        description={project.description}
+                        technologies={project.stack}
+                        repoUrl={project.repoUrl}
+                        demoUrl={project.demoUrl}
+                    />
+                ))}
             </div>
         </section>
     )
