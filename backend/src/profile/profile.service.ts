@@ -46,7 +46,9 @@ export class ProfileService {
           'Hiring:',
           this.formatHiring(),
           'Featured Projects:',
-          this.formatProjects(profileData.projects.filter((project) => project.featured)),
+          this.formatProjects(
+            profileData.projects.filter((project) => project.featured),
+          ),
         ].join('\n\n');
 
       case 'CONTACT':
@@ -68,7 +70,9 @@ export class ProfileService {
           'Capabilities:',
           this.formatCapabilities(),
           'Featured Projects:',
-          this.formatProjects(profileData.projects.filter((project) => project.featured)),
+          this.formatProjects(
+            profileData.projects.filter((project) => project.featured),
+          ),
           'Experience:',
           this.formatExperience(profileData.experience),
         ].join('\n\n');
