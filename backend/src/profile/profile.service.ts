@@ -115,8 +115,12 @@ export class ProfileService {
           `Description: ${project.description}`,
           `Stack: ${project.stack.join(', ')}`,
           `Highlights: ${project.highlights.join(' | ')}`,
-          project.chatNotes?.problem ? `Problem: ${project.chatNotes.problem}` : null,
-          project.chatNotes?.solution ? `Solution: ${project.chatNotes.solution}` : null,
+          project.chatNotes?.problem
+            ? `Problem: ${project.chatNotes.problem}`
+            : null,
+          project.chatNotes?.solution
+            ? `Solution: ${project.chatNotes.solution}`
+            : null,
           project.chatNotes?.architecture?.length
             ? `Architecture: ${project.chatNotes.architecture.join(' | ')}`
             : null,
