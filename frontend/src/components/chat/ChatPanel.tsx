@@ -20,6 +20,14 @@ const introMessage: UIMessage = {
   ],
 };
 
+function hasVisibleAssistantText(message: UIMessage | undefined) {
+  return (
+    message?.role === "assistant" &&
+    message.parts.some(
+      (part) => part.type === "text" && part.text.trim().length > 0,
+    )
+  );
+}
 
 
 export default function ChatPanel() {
@@ -37,6 +45,14 @@ export default function ChatPanel() {
   }, [messages.length, setMessages]);
 
   const isBusy = status === "submitted" || status === "streaming";
+  const lastMessage = messages.at(-1);
+
+  const isProcessing =
+    status === "submitted" ||
+    (status === "streaming" && !hasVisibleAssistantText(lastMessage));
+
+  
+  console.log('isProcessing', isProcessing)
 
   async function handleSendMessage() {
       const trimmed = inputMessage.trim()
@@ -52,7 +68,7 @@ export default function ChatPanel() {
   return (
     <section className="flex h-full flex-col">
         <ChatHeader />
-        <ChatMessages messages={messages} />
+        <ChatMessages messages={messages} isProcessing={isProcessing}/>
 
         {error ? (
           <div className="px-6 pb-2 font-mono text-xs text-red-400">

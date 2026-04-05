@@ -4,6 +4,7 @@ import type { UIMessage } from "ai";
 
 type ChatMessagesProps = {
   messages: UIMessage[];
+  isProcessing?: boolean;
 };
 
 function getText(message: UIMessage) {
@@ -20,7 +21,7 @@ function getText(message: UIMessage) {
 
 
 
-export default function ChatMessages({ messages }: ChatMessagesProps) {
+export default function ChatMessages({ messages, isProcessing = false }: ChatMessagesProps) {
     const messagesEndRef = useRef<HTMLDivElement | null>(null)
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -73,6 +74,22 @@ export default function ChatMessages({ messages }: ChatMessagesProps) {
                 </div>
             )
         })}
+
+        {isProcessing ? (
+            <div className="flex flex-col items-start">
+                <div className="max-w-[85%] rounded-r-xl rounded-bl-xl border border-border-color bg-surface p-4 text-sm leading-relaxed text-zinc-300 shadow-sm">
+                    <div className="flex items-center gap-2">
+                        <span className="font-display text-zinc-400">Thinking</span>
+                        <div className="flex items-center gap-1">
+                            <span className="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:-0.3s]" />
+                            <span className="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:-0.15s]" />
+                            <span className="h-2 w-2 animate-bounce rounded-full bg-primary" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ) : null}
+
         <div ref={messagesEndRef} />
     </div>
   )
