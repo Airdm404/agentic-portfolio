@@ -58,10 +58,8 @@ export class ChatService {
     if (latestUserText.length === 0) {
       throw new BadRequestException('A text user message is required.');
     }
-    console.log('Latest user message extracted:', latestUserText);
 
     const latestUserTextTokenCount = countTokens(latestUserText);
-    console.log('Latest user text tokens:', latestUserTextTokenCount);
 
     if (latestUserTextTokenCount > MAX_LATEST_USER_TEXT_TOKENS) {
       this.sendFixedReply(response, messages, getTooLongReply());
@@ -72,7 +70,6 @@ export class ChatService {
 
     try {
       classification = await this.classifyIntent(latestUserText);
-      console.log('Classification complete:', classification.intent);
     } catch (error) {
       console.error('Intent classification failed:', error);
       throw new InternalServerErrorException('Failed to classify user intent.');
@@ -91,7 +88,6 @@ export class ChatService {
     const profileContext = this.profileService.getChatContext(
       classification.intent,
     );
-    console.log('Profile context retrieved');
 
     try {
       const result = streamText({
