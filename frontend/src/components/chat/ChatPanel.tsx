@@ -15,7 +15,7 @@ const introMessage: UIMessage = {
   parts: [
     {
       type: "text",
-      text: "Ask about Edem’s work, projects, stack, or background.",
+      text: "Hi, I’m Edem’s portfolio assistant. I can answer questions about his background, projects, and experience. What would you like to know?",
     },
   ],
 };

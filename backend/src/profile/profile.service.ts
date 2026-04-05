@@ -29,16 +29,12 @@ export class ProfileService {
           this.formatBasics(),
           'Projects:',
           this.formatProjects(profileData.projects),
-        ].join('\n\n');
-
-      case 'EXPERIENCE':
-        return [
-          this.formatBasics(),
-          'Experience:',
-          this.formatExperience(profileData.experience),
           'Capabilities:',
           this.formatCapabilities(),
         ].join('\n\n');
+
+      case 'EXPERIENCE':
+        return this.formatExperienceOverview();
 
       case 'HIRING':
         return [
@@ -59,39 +55,89 @@ export class ProfileService {
         ].join('\n\n');
 
       case 'SMALL_TALK':
-      case 'OFF_TOPIC':
-      case 'INJECTION':
-        return this.formatBasics();
+        return this.formatBasics({
+          includeLocation: false,
+          includeAvailability: false,
+        });
 
       case 'PORTFOLIO':
       default:
-        return [
-          this.formatBasics(),
-          'Capabilities:',
-          this.formatCapabilities(),
-          'Featured Projects:',
-          this.formatProjects(
-            profileData.projects.filter((project) => project.featured),
-          ),
-          'Experience:',
-          this.formatExperience(profileData.experience),
-        ].join('\n\n');
+        return this.formatPortfolioOverview();
     }
   }
 
-  private formatBasics(): string {
+  private formatBasics(options?: {
+    includeEmail?: boolean;
+    includeLocation?: boolean;
+    includeAvailability?: boolean;
+  }): string {
     const { basics } = profileData;
+    const {
+      includeEmail = false,
+      includeLocation = true,
+      includeAvailability = true,
+    } = options ?? {};
 
     return [
       `Name: ${basics.name}`,
       `Title: ${basics.title}`,
       `Summary: ${basics.summary}`,
-      `Email: ${basics.email}`,
-      basics.location ? `Location: ${basics.location}` : null,
-      basics.availability ? `Availability: ${basics.availability}` : null,
+      includeEmail ? `Email: ${basics.email}` : null,
+      includeLocation && basics.location
+        ? `Location: ${basics.location}`
+        : null,
+      includeAvailability && basics.availability
+        ? `Availability: ${basics.availability}`
+        : null,
     ]
       .filter(Boolean)
       .join('\n');
+  }
+
+  private formatPortfolioOverview(): string {
+    const currentRole = profileData.experience[0];
+    const featuredProjects = profileData.projects.filter(
+      (project) => project.featured,
+    );
+
+    return [
+      this.formatBasics({ includeLocation: false, includeAvailability: false }),
+      currentRole
+        ? [
+            'Current Role:',
+            `${currentRole.role} at ${currentRole.company} (${currentRole.start} - ${currentRole.end})`,
+            `Focus: ${currentRole.summary}`,
+          ].join('\n')
+        : null,
+      featuredProjects.length > 0
+        ? [
+            'Featured Projects:',
+            this.formatProjectSnapshots(featuredProjects),
+          ].join('\n')
+        : null,
+    ]
+      .filter(Boolean)
+      .join('\n\n');
+  }
+
+  private formatExperienceOverview(): string {
+    const currentRole = profileData.experience[0];
+
+    return [
+      currentRole
+        ? [
+            'Current Role:',
+            `${currentRole.role} at ${currentRole.company} (${currentRole.start} - ${currentRole.end})`,
+            `Focus: ${currentRole.summary}`,
+          ].join('\n')
+        : null,
+      'Experience:',
+      this.formatExperience(profileData.experience),
+      'Capabilities:',
+      this.formatCapabilities(),
+    ]
+      .filter(Boolean)
+      .join('\n\n');
   }
 
   private formatCapabilities(): string {
@@ -135,6 +181,15 @@ export class ProfileService {
           .join('\n'),
       )
       .join('\n\n');
+  }
+
+  private formatProjectSnapshots(projects: Project[]): string {
+    return projects
+      .map(
+        (project) =>
+          `${project.name}: ${project.tagline}. ${project.description}`,
+      )
+      .join('\n');
   }
 
   private formatExperience(experience: ExperienceItem[]): string {
