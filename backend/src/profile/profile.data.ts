@@ -94,8 +94,7 @@ export const profileData: PortfolioProfile = {
         'Routes user questions by intent before generating responses',
         'Uses structured portfolio data as reusable context across the UI and chat layers',
       ],
-      repoUrl: 'https://github.com/Airdm404',
-      demoUrl: 'https://edemahorlu.com',
+      repoUrl: 'https://github.com/Airdm404/agentic-portfolio',
       featured: true,
       chatNotes: {
         problem:
@@ -130,8 +129,7 @@ export const profileData: PortfolioProfile = {
         'Automated scraping, embedding, and querying of large document datasets',
         'Used Pinecone to support scalable semantic vector search',
       ],
-      repoUrl: 'https://github.com/Airdm404',
-      demoUrl: 'https://edemahorlu.com',
+      repoUrl: 'https://github.com/Airdm404/researchquery',
       featured: true,
       chatNotes: {
         problem:
@@ -174,8 +172,7 @@ export const profileData: PortfolioProfile = {
         'Generated playlists tailored to users’ moods from captured images',
         'Deployed a real-time web app using Firebase and Vercel',
       ],
-      repoUrl: 'https://github.com/Airdm404',
-      demoUrl: 'https://edemahorlu.com',
+      repoUrl: 'https://github.com/Airdm404/moodmix',
       featured: false,
       chatNotes: {
         problem:
