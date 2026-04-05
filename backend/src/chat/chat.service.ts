@@ -21,6 +21,7 @@ import {
 } from './chat.prompts';
 import { classifyIntentSchema } from './chat.schemas';
 import { ProfileService } from 'src/profile/profile.service';
+import { z } from 'zod';
 
 @Injectable()
 export class ChatService {
@@ -36,6 +37,8 @@ export class ChatService {
     } catch (error) {
       console.error('validateUIMessages failed:', error);
       throw new BadRequestException('Invalid chat message payload.');
+    } finally {
+      console.log('Validation complete');
     }
 
     const latestUserMessage = this.getLatestUserMessage(messages);
@@ -48,12 +51,22 @@ export class ChatService {
       throw new BadRequestException('A text user message is required.');
     }
 
-    try {
-      const classification = await this.classifyIntent(latestUserText);
-      const profileContext = this.profileService.getChatContext(
-        classification.intent,
-      );
+    let classification: z.infer<typeof classifyIntentSchema>;
 
+    try {
+      classification = await this.classifyIntent(latestUserText);
+      console.log('Classification complete', classification.intent);
+    } catch (error) {
+      console.error('Intent classification failed:', error);
+      throw new InternalServerErrorException('Failed to classify user intent.');
+    }
+
+    const profileContext = this.profileService.getChatContext(
+      classification.intent,
+    );
+    console.log('Profile context retrieved', profileContext);
+
+    try {
       const result = streamText({
         model: openai('gpt-5-mini'),
         system: [
