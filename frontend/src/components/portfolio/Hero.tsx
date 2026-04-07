@@ -32,6 +32,8 @@ export default function Hero({ basics, socials }: HeroProps) {
                 { basics.resumeUrl ? (
                 <a 
                     href={basics.resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="group flex items-center gap-2 rounded border border-primary bg-primary/10 px-6 py-3 font-mono text-sm text-primary transition-all duration-300 hover:bg-primary/20 hover:shadow-neon"
                 >    
                     <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">
