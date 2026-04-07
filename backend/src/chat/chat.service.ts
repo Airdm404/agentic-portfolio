@@ -28,7 +28,7 @@ import {
   getTooLongReply,
 } from './chat.prompts';
 import { classifyIntentSchema } from './chat.schemas';
-import { ProfileService } from 'src/profile/profile.service';
+import { ProfileService } from '../profile/profile.service';
 import { z } from 'zod';
 
 const MAX_LATEST_USER_TEXT_TOKENS = 80;
@@ -61,10 +61,7 @@ export class ChatService {
       throw new BadRequestException('A text user message is required.');
     }
 
-    const latestUserTextTokenCount = countTokens(latestUserText);
-    console.log('latestUserTextTokenCount', latestUserTextTokenCount);
-
-    if (latestUserTextTokenCount > MAX_LATEST_USER_TEXT_TOKENS) {
+    if (countTokens(latestUserText) > MAX_LATEST_USER_TEXT_TOKENS) {
       this.sendFixedReply(response, messages, getTooLongReply());
       return;
     }
@@ -77,8 +74,6 @@ export class ChatService {
       console.error('Intent classification failed:', error);
       throw new InternalServerErrorException('Failed to classify user intent.');
     }
-
-    console.log('classification:', classification);
 
     if (classification.intent === 'OFF_TOPIC') {
       this.sendFixedReply(response, messages, getOffTopicReply());
