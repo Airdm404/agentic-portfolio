@@ -1,5 +1,6 @@
 import {useRef, useEffect} from "react"
 import type { UIMessage } from "ai";
+import ReactMarkdown from "react-markdown";
 
 
 type ChatMessagesProps = {
@@ -69,7 +70,26 @@ export default function ChatMessages({ messages, isProcessing = false }: ChatMes
                         : "rounded-l-xl rounded-br-xl"
                     }`}
                     >
-                    <p className="font-display">{text}</p>
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => (
+                          <p className="font-display whitespace-pre-wrap">{children}</p>
+                        ),
+                        ul: ({ children }) => (
+                          <ul className="list-disc space-y-1 pl-5 font-display">
+                            {children}
+                          </ul>
+                        ),
+                        ol: ({ children }) => (
+                          <ol className="list-decimal space-y-1 pl-5 font-display">
+                            {children}
+                          </ol>
+                        ),
+                        li: ({ children }) => <li>{children}</li>,
+                      }}
+                    >
+                      {text}
+                    </ReactMarkdown>
                     </div>
                 </div>
             )

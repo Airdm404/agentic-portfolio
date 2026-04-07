@@ -78,7 +78,7 @@ export class ChatService {
       throw new InternalServerErrorException('Failed to classify user intent.');
     }
 
-    console.log('classification', classification);
+    console.log('classification:', classification);
 
     if (classification.intent === 'OFF_TOPIC') {
       this.sendFixedReply(response, messages, getOffTopicReply());
