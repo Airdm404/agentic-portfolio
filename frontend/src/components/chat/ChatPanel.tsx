@@ -4,9 +4,7 @@ import ChatMessages from "./ChatMessages"
 import ChatInput from "./ChatInput"
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
-
-
-const API_URL = "http://localhost:3000/chat"
+import { buildApiUrl } from "../../lib/api";
 
 
 const introMessage: UIMessage = {
@@ -34,7 +32,7 @@ export default function ChatPanel() {
   const [inputMessage, setInputMessage] = useState("")
   const { messages, sendMessage, setMessages, status, error } = useChat<UIMessage>({
     transport: new DefaultChatTransport({
-      api: API_URL,
+      api: buildApiUrl('/chat'),
     }),
   });
 
@@ -50,9 +48,6 @@ export default function ChatPanel() {
   const isProcessing =
     status === "submitted" ||
     (status === "streaming" && !hasVisibleAssistantText(lastMessage));
-
-  
-  console.log('isProcessing', isProcessing)
 
   async function handleSendMessage() {
       const trimmed = inputMessage.trim()
