@@ -31,7 +31,9 @@ import { classifyIntentSchema } from './chat.schemas';
 import { ProfileService } from 'src/profile/profile.service';
 import { z } from 'zod';
 
-const MAX_LATEST_USER_TEXT_TOKENS = 250;
+const MAX_LATEST_USER_TEXT_TOKENS = 80;
+const MAX_HISTORY_MESSAGES = 8;
+const MAX_HISTORY_TOKENS = 1200;
 
 @Injectable()
 export class ChatService {
@@ -60,6 +62,7 @@ export class ChatService {
     }
 
     const latestUserTextTokenCount = countTokens(latestUserText);
+    console.log('latestUserTextTokenCount', latestUserTextTokenCount);
 
     if (latestUserTextTokenCount > MAX_LATEST_USER_TEXT_TOKENS) {
       this.sendFixedReply(response, messages, getTooLongReply());
@@ -74,6 +77,8 @@ export class ChatService {
       console.error('Intent classification failed:', error);
       throw new InternalServerErrorException('Failed to classify user intent.');
     }
+
+    console.log('classification', classification);
 
     if (classification.intent === 'OFF_TOPIC') {
       this.sendFixedReply(response, messages, getOffTopicReply());
@@ -90,6 +95,8 @@ export class ChatService {
     );
 
     try {
+      const messagesForModel = this.getMessagesForModel(messages);
+
       const result = streamText({
         model: openai('gpt-5-mini'),
         system: [
@@ -99,7 +106,7 @@ export class ChatService {
           'Portfolio context:',
           profileContext,
         ].join('\n\n'),
-        messages: await convertToModelMessages(messages),
+        messages: await convertToModelMessages(messagesForModel),
       });
 
       result.pipeUIMessageStreamToResponse(response, {
@@ -127,6 +134,31 @@ export class ChatService {
       .map((part) => part.text)
       .join('')
       .trim();
+  }
+
+  private getMessagesForModel(messages: UIMessage[]): UIMessage[] {
+    const selectedMessages: UIMessage[] = [];
+    let tokenCount = 0;
+
+    for (let index = messages.length - 1; index >= 0; index -= 1) {
+      const message = messages[index];
+      const messageText = this.getTextFromMessage(message);
+      const messageTokenCount = countTokens(messageText);
+      const nextMessageCount = selectedMessages.length + 1;
+      const nextTokenCount = tokenCount + messageTokenCount;
+      const exceedsMessageLimit = nextMessageCount > MAX_HISTORY_MESSAGES;
+      const exceedsTokenLimit =
+        selectedMessages.length > 0 && nextTokenCount > MAX_HISTORY_TOKENS;
+
+      if (exceedsMessageLimit && exceedsTokenLimit) {
+        break;
+      }
+
+      selectedMessages.push(message);
+      tokenCount = nextTokenCount;
+    }
+
+    return selectedMessages.reverse();
   }
 
   private async classifyIntent(text: string) {
