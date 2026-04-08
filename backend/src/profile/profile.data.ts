@@ -95,6 +95,7 @@ export const profileData: PortfolioProfile = {
         'Uses structured portfolio data as reusable context across the UI and chat layers',
       ],
       repoUrl: 'https://github.com/Airdm404/agentic-portfolio',
+      demoUrl: 'https://edemah.com',
       featured: true,
       chatNotes: {
         problem:
