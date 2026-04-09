@@ -93,7 +93,7 @@ export class ChatService {
       const messagesForModel = this.getMessagesForModel(messages);
 
       const result = streamText({
-        model: openai('gpt-5-mini'),
+        model: openai('gpt-5.4-nano'),
         system: [
           BASE_SYSTEM_PROMPT,
           `Resolved intent: ${classification.intent}`,
@@ -158,7 +158,7 @@ export class ChatService {
 
   private async classifyIntent(text: string) {
     const { output } = await generateText({
-      model: openai('gpt-5-nano'),
+      model: openai('gpt-5.4-nano'),
       system: CLASSIFIER_SYSTEM_PROMPT,
       prompt: text,
       output: Output.object({
