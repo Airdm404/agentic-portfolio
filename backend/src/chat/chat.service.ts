@@ -93,12 +93,13 @@ export class ChatService {
       const messagesForModel = this.getMessagesForModel(messages);
 
       const result = streamText({
-        model: openai('gpt-5.4-nano'),
+        model: openai('gpt-5.4-mini'),
         system: [
           BASE_SYSTEM_PROMPT,
-          `Resolved intent: ${classification.intent}`,
+          `Current user intent: ${classification.intent}`,
+          'Apply the following route-specific instruction for this reply:',
           getRouteInstruction(classification.intent),
-          'Portfolio context:',
+          'Use the following relevant portfolio context for this reply:',
           profileContext,
         ].join('\n\n'),
         messages: await convertToModelMessages(messagesForModel),
